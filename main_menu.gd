@@ -1,19 +1,9 @@
 extends MarginContainer
 
+func _on_OfflineGameButton_pressed():
+	print("changing to offline board scene")
+	get_tree().change_scene("res://board.tscn")
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
-
-func _on_Button2_pressed():
-	print("123")
+func _on_OnlineGameButton_pressed():
+	print("changing to online board scene")
+	get_tree().change_scene("res://board_online.tscn")
