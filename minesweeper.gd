@@ -10,6 +10,12 @@ var cur_board = []
 # mine = -1
 var rand = RandomNumberGenerator.new()
 
+enum OpenResult {
+	GameOver,
+	GameWon,
+	Continue
+}
+
 # Generates a board
 func _init():
 	rand.randomize()
@@ -22,21 +28,22 @@ func _init():
 	generate_mine_locations()
 	generate()
 
-# Returns false when player hits a mine.
 func open(x, y):
 	if cur_board[x][y] != -2:
 		#already explored
-		return true
+		return OpenResult.Continue
 	elif board[x][y] == -1:
 		#game_over
-		return false
+		return OpenResult.GameOver
 	elif board[x][y] == 0:
 		cur_board[x][y] = board[x][y]
 		dfs2(x, y)
-		return true
+		return OpenResult.Continue
 	else:
 		cur_board[x][y] = board[x][y]
-		return true
+		if game_won():
+			return OpenResult.GameWon
+		return OpenResult.Continue
 	
 func mark(x, y):
 	cur_board[x][y] = -3
@@ -100,3 +107,11 @@ func mines_around(x, y):
 		if board[x2][y2] == -1:
 			cnt += 1
 	return cnt
+
+# returns true if game won
+func game_won():
+	for i in range(rows):
+		for j in range(cols):
+			if cur_board[i][j] != -2:
+				return false
+	return true
