@@ -98,13 +98,15 @@ _global_script_class_icons={
 
 [application]
 
-config/name="test"
+config/name="minesweeper"
 run/main_scene="res://main_menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 globals="*res://globals.gd"
+networking="*res://networking.gd"
+Nakama="*res://nakama/addons/com.heroiclabs.nakama/Nakama.gd"
 
 [rendering]
 

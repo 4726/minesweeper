@@ -43,4 +43,4 @@ rect_min_size = Vector2( 20, 20 )
 text = "Leaderboard"
 [connection signal="pressed" from="VBoxContainer/OfflineGameButton" to="." method="_on_OfflineGameButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/OnlineGameButton" to="." method="_on_OnlineGameButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/LeaderboardButton" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="VBoxContainer/LeaderboardButton" to="." method="_on_LeaderboardButton_pressed"]
