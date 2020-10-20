@@ -12,7 +12,16 @@ func _ready():
 	else:
 		print("session created")
 
-func disconnect_online():
-	#might need to disconnect from server
-	nakama_client = null
-	nakama_session = null
+func update_leaderboard(time: int, board: PoolByteArray):
+	var leaderboard_id = "scores"
+	var metadata = {
+		"board": board,
+	}
+	var record = yield(nakama_client.write_leaderboard_record_async(nakama_session, leaderboard_id, time, 0, metadata), "completed")
+	if record.is_exception():
+		print("error putting record: %s" % record)
+	else:
+		print("successfully updated record: %s %s" % [record.username, record.score])
+
+func get_leaderboard():
+	var res = yield(nakama_client.list_leaderboard_records_async(nakama_session, "scores"), "completed")

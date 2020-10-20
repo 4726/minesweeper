@@ -1,4 +1,4 @@
-extends Node
+extends TileMap
 
 const Minesweeper = preload("res://minesweeper.gd")
 
@@ -16,7 +16,8 @@ func _init():
 func _ready():
 	elapsedLabel = Label.new()
 	elapsedLabel.set_text("0")
-	elapsedLabel.set_position(Vector2(1080, 840))
+	elapsedLabel.set_position(Vector2(1140, 420))
+	self.add_child(elapsedLabel)
 	for i in range(cols):
 		buttons.append([])
 		for j in range(rows):
@@ -28,15 +29,22 @@ func _ready():
 			buttons[i].append(button)
 			self.add_child(button)
 
-func on_button_press(event, i, j):
+func on_button_press(event, i: int, j: int):
 	if event is InputEventMouseButton and event.pressed:
 		if !started:
 			started = true
 			startTime = OS.get_unix_time()
 		print(str(j) + " " + str(i))
 		if event.button_index == BUTTON_LEFT:
-			if !ms.open(j, i):
-				get_tree().change_scene("res://game_over.tscn")
+			match ms.open(j, i):
+				ms.OpenResult.GameWon:
+					var totalTime = elapsedLabel.get_text() - startTime
+					globals.set_completion_time(totalTime)
+					var encoded = ms.encode_board()
+					networking.update_leaderboard(totalTime, encoded)
+					get_tree().change_scene("res://game_won.tscn")
+				ms.OpenResult.GameOver:
+					get_tree().change_scene("res://game_over.tscn")
 			self.update_buttons()
 		elif event.button_index == BUTTON_RIGHT:
 			ms.mark(j, i)
@@ -52,7 +60,7 @@ func update_buttons():
 			else:
 				buttons[j][i].set_text(str(ms.cur_board[i][j]))
 	
-func _process(delta):
+func _process(_delta):
 	var time = OS.get_unix_time()
 	if started:
 		elapsedLabel.set_text(str(time - startTime))

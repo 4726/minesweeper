@@ -28,7 +28,7 @@ func _init():
 	generate_mine_locations()
 	generate()
 
-func open(x, y):
+func open(x: int, y: int):
 	if cur_board[x][y] != -2:
 		#already explored
 		return OpenResult.Continue
@@ -45,11 +45,11 @@ func open(x, y):
 			return OpenResult.GameWon
 		return OpenResult.Continue
 	
-func mark(x, y):
+func mark(x: int, y: int):
 	cur_board[x][y] = -3
 	print("marked")
 
-func dfs2(x, y):
+func dfs2(x: int, y: int):
 	var dirs = []
 	dirs.append([0, 1])
 	dirs.append([1, 1])
@@ -88,7 +88,7 @@ func generate_mine_locations():
 			board[rand_x][rand_y] = -1
 			finished += 1
 			
-func mines_around(x, y):
+func mines_around(x: int, y: int):
 	var dirs = []
 	dirs.append([0, 1])
 	dirs.append([1, 1])
@@ -115,3 +115,39 @@ func game_won():
 			if cur_board[i][j] != -2:
 				return false
 	return true
+
+func encode_board():
+	var arr = PoolByteArray()
+	var cur = 0
+	var bit = 0
+	for i in range(rows):
+		for j in range(cols):
+			if board[i][j] == -1:
+				cur |= 1 << bit 
+			bit += 1
+			if bit == 8 || (i == rows-1 && j == cols-1):
+				bit = 0
+				arr.append(cur)
+				cur = 0
+	return arr
+
+func decode_board(arr: PoolByteArray):
+	var board1 = []
+	for i in range(rows):
+		board1.append([])
+		for _j in range(cols):
+			board1[i].append(0)
+	var sets = []
+	for v in arr:
+		for i in range(8):
+			if (v >> i) % 2 == 1:
+				sets.append(true)
+			else:
+				sets.append(false)
+	var k = 0
+	for i in range(rows):
+		for j in range(cols):
+			if sets[k]:
+				board1[i][j] = -1
+			k += 1
+	return board1

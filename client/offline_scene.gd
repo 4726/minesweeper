@@ -29,7 +29,7 @@ func _ready():
 			buttons[i].append(button)
 			self.add_child(button)
 
-func on_button_press(event, i, j):
+func on_button_press(event, i: int, j: int):
 	if event is InputEventMouseButton and event.pressed:
 		if !started:
 			started = true
