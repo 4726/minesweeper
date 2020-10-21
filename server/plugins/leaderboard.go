@@ -1,9 +1,16 @@
 package main
 
-import nk "github.com/heroiclabs/nakama-common/runtime"
+import (
+	"context"
+	"database/sql"
 
-func SetupLeaderboard(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
-	err := nk.LeaderboardCreate(ctx, "scores", false, "asc", "best", "", map[string]interface{})
+	"github.com/heroiclabs/nakama-common/runtime"
+)
 
-	return "", err
+func InitModule(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, initializer runtime.Initializer) error {
+	return SetupLeaderboard(ctx, nk)
+}
+
+func SetupLeaderboard(ctx context.Context, nk runtime.NakamaModule) error {
+	return nk.LeaderboardCreate(ctx, "scores", false, "asc", "best", "", map[string]interface{}{})
 }
