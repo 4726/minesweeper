@@ -1,6 +1,6 @@
 extends Node
 
-var lastCompleteTime
+var lastCompleteTime = 0
 var player_name = ""
 
 func set_player_name(name: String):
